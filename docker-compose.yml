@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgis/postgis:15-3.3
+    container_name: urbansense_db
+    restart: always
+    environment:
+      POSTGRES_USER: urbansense
+      POSTGRES_PASSWORD: urbansense_password
+      POSTGRES_DB: urbansense_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - urbansense_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: urbansense_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - urbansense_network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  urbansense_network:
+    driver: bridge
