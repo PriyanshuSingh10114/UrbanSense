@@ -18,9 +18,13 @@ export default function DashboardLayout({ children }) {
             <Map size={20} className="text-indigo-400" />
             Live Map
           </Link>
-          <Link href="/dashboard" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-slate-800 transition-colors opacity-50 cursor-not-allowed">
+          <Link href="/dashboard/analytics" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-slate-800 transition-colors">
+            <Activity size={20} className="text-emerald-400" />
+            Analytics
+          </Link>
+          <Link href="/dashboard/alerts" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-slate-800 transition-colors">
             <Activity size={20} className="text-rose-400" />
-            Alerts (Coming Soon)
+            Alerts
           </Link>
         </nav>
         <div className="p-4 border-t border-slate-800">
