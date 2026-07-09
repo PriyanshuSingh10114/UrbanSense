@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.api import auth, users
+from app.api import auth, users, ai_endpoints
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -10,6 +10,7 @@ app = FastAPI(
 
 app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth", tags=["auth"])
 app.include_router(users.router, prefix=f"{settings.API_V1_STR}/users", tags=["users"])
+app.include_router(ai_endpoints.router, prefix=f"{settings.API_V1_STR}/ai", tags=["ai"])
 
 # Set all CORS enabled origins
 app.add_middleware(

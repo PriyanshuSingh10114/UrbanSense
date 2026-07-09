@@ -45,9 +45,9 @@ async def update_user_me(
 @router.get("/", response_model=List[UserResponse])
 async def read_users(
     db: Annotated[AsyncSession, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_active_superuser)],
     skip: int = 0,
     limit: int = 100,
-    current_user: Annotated[User, Depends(get_current_active_superuser)]
 ) -> List[User]:
     """Retrieve users (Admin only)."""
     result = await db.execute(select(User).offset(skip).limit(limit))
