@@ -1,4 +1,4 @@
-import google.generativeai as genai
+from google import genai
 from typing import Dict, Any, List
 from app.core.config import settings
 from loguru import logger
@@ -11,18 +11,17 @@ class PollutionAttributionAgent:
     """
     def __init__(self):
         if settings.GEMINI_API_KEY:
-            genai.configure(api_key=settings.GEMINI_API_KEY)
-            self.model = genai.GenerativeModel('gemini-1.5-flash')
+            self.client = genai.Client(api_key=settings.GEMINI_API_KEY)
         else:
             logger.warning("GEMINI_API_KEY not set. Attribution will run in mock mode.")
-            self.model = None
+            self.client = None
 
     async def analyze_spike(self, aqi_value: float, wind_direction: float, wind_speed: float, nearby_sources: List[Dict[str, str]]) -> Dict[str, Any]:
         """
         Analyzes the given data to attribute the spike to a source.
         nearby_sources format: [{"id": "uuid", "name": "Factory X", "type": "industry", "distance_km": 1.2, "bearing": 45.0}]
         """
-        if not self.model:
+        if not self.client:
             # Fallback mock for local development without API key
             return {
                 "attributed_source_id": nearby_sources[0]["id"] if nearby_sources else None,
@@ -49,7 +48,10 @@ class PollutionAttributionAgent:
         """
         
         try:
-            response = self.model.generate_content(prompt)
+            response = self.client.models.generate_content(
+                model='gemini-1.5-flash',
+                contents=prompt
+            )
             # Clean potential markdown from response
             raw_text = response.text.strip().removeprefix('```json').removesuffix('```').strip()
             return json.loads(raw_text)

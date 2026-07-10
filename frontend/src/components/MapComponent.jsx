@@ -1,4 +1,4 @@
-"use client"
+
 import { MapContainer, TileLayer, Popup, CircleMarker } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'

@@ -1,4 +1,4 @@
-import google.generativeai as genai
+from google import genai
 from app.core.config import settings
 from loguru import logger
 
@@ -8,13 +8,12 @@ class CitizenHealthAgent:
     """
     def __init__(self):
         if settings.GEMINI_API_KEY:
-            genai.configure(api_key=settings.GEMINI_API_KEY)
-            self.model = genai.GenerativeModel('gemini-1.5-flash')
+            self.client = genai.Client(api_key=settings.GEMINI_API_KEY)
         else:
-            self.model = None
+            self.client = None
 
     async def generate_advisory(self, aqi: float, weather_condition: str, target_demographic: str = "general public") -> str:
-        if not self.model:
+        if not self.client:
             return "Mock Advisory: Air quality is currently poor. Please wear a mask if you are sensitive."
 
         prompt = f"""
@@ -27,7 +26,10 @@ class CitizenHealthAgent:
         """
         
         try:
-            response = self.model.generate_content(prompt)
+            response = self.client.models.generate_content(
+                model='gemini-1.5-flash',
+                contents=prompt
+            )
             return response.text.strip()
         except Exception as e:
             logger.error(f"Gemini API Error during health advisory: {e}")
