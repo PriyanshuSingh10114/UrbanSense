@@ -106,3 +106,20 @@
     @apply shadow-[0_0_40px_-10px_rgba(168,85,247,0.25)];
   }
 }
+
+/* Custom Leaflet Popup Overrides */
+.custom-leaflet-popup .leaflet-popup-content-wrapper, 
+.custom-leaflet-popup .leaflet-popup-tip {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.custom-leaflet-popup .leaflet-popup-content {
+  margin: 0;
+  padding: 0;
+}
+
+/* Custom City Marker Override for Macro View */
+.custom-city-marker {
+  background: transparent !important;
+  border: none !important;
+}

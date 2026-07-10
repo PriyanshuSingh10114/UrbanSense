@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 // Layouts
 import MainLayout from '@/layouts/MainLayout.jsx'
 import DashboardLayout from '@/layouts/DashboardLayout.jsx'
+import AICopilot from '@/components/AICopilot.jsx'
 
 // Pages
 import LandingPage from '@/pages/LandingPage.jsx'
@@ -46,6 +47,7 @@ function App() {
           <Route path="dashboard" element={<AdminDashboard />} />
         </Route>
       </Routes>
+      <AICopilot />
     </BrowserRouter>
   )
 }

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Globe } from 'lucide-react'
+import { Menu, X, Globe, MapPin } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useAppStore, CITIES } from '@/store/useAppStore'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
+  const { selectedCity, selectCity, clearCitySelection } = useAppStore()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -66,6 +68,26 @@ export default function Navbar() {
                 </Link>
               ))}
             </div>
+            
+            {/* Global City Selector */}
+            {isActive('/dashboard') && (
+              <div className="ml-4 flex items-center bg-white/5 border border-white/10 rounded-full px-3 py-1 text-sm">
+                <MapPin className="h-3 w-3 text-muted-foreground mr-2" />
+                <select 
+                  className="bg-transparent text-foreground text-[13px] font-medium focus:outline-none appearance-none cursor-pointer"
+                  value={selectedCity || ''}
+                  onChange={(e) => {
+                    if (e.target.value === '') clearCitySelection();
+                    else selectCity(e.target.value);
+                  }}
+                >
+                  <option value="" className="bg-background text-foreground">National View (India)</option>
+                  {Object.values(CITIES).map(city => (
+                    <option key={city.id} value={city.id} className="bg-background text-foreground">{city.name}</option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
           
           {/* CTA / Gov Portal */}
