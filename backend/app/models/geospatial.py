@@ -12,6 +12,11 @@ class SourceType(str, enum.Enum):
     construction = "construction"
     factory = "factory"
 
+class POIType(str, enum.Enum):
+    hospital = "hospital"
+    school = "school"
+    industrial = "industrial"
+
 class City(Base):
     __tablename__ = "cities"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
@@ -37,3 +42,11 @@ class PollutionSource(Base):
     location = Column(Geometry(geometry_type='POINT', srid=4326), nullable=False)
     risk_level = Column(Integer, default=1)
     registered_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+class POI(Base):
+    __tablename__ = "pois"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    city_id = Column(UUID(as_uuid=True), ForeignKey('cities.id', ondelete='CASCADE'), nullable=False)
+    name = Column(String, nullable=False)
+    type = Column(Enum(POIType), nullable=False)
+    location = Column(Geometry(geometry_type='POINT', srid=4326), nullable=False)
